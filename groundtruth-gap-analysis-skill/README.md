@@ -12,6 +12,8 @@ This directory contains a minimal Docker-based reproduction package for:
   Pulls the required images, builds OpenSSL with the SOK toolchain, and extracts `libcrypto.gtBlock.pb`.
 - `docker/analyze_libcrypto_gap.sh`
   Runs the corrected gap-analysis script inside Docker.
+- `BUILD_LIBCRYPTO_GROUNDTRUTH.md`
+  Step-by-step explanation of how `openssl-3.4.4` is built into `libcrypto.so.3` groundtruth.
 - `skill/SKILL.md`
   The reusable skill instructions.
 - `skill/scripts/analyze_groundtruth_gap.py`
@@ -20,6 +22,11 @@ This directory contains a minimal Docker-based reproduction package for:
   Human-readable final summary for this session.
 - `results/libcrypto_objdump_unseen_ranges_analysis_v2.json`
   Full structured result for this session.
+- `results/libcrypto-artifacts/`
+  Committed build outputs and disassembly:
+  - `libcrypto.so.3`
+  - `libcrypto.gtBlock.pb`
+  - `libcrypto.text.objdump.txt`
 
 ### Docker Reproduction
 
