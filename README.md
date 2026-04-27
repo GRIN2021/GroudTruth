@@ -314,6 +314,36 @@ ubuntu@ubuntu:/x86-sok/extract_gt: bash run_extract_linux.sh -d <directory> -s .
 
 ### Windows
 
+## Reproduce `libcrypto.so.3` Groundtruth Gap Analysis
+
+For a minimal Docker-based reproduction of:
+
+- building `openssl-3.4.4` with `bin2415/x86_gt:0.1`
+- extracting `libcrypto.so.3` groundtruth with `bin2415/py_gt`
+- analyzing `.text` instruction addresses missing from `gtBlock.pb`
+
+see:
+
+```text
+groundtruth-gap-analysis-skill/
+```
+
+Quick start:
+
+```console
+$ bash groundtruth-gap-analysis-skill/docker/build_libcrypto_groundtruth.sh
+$ bash groundtruth-gap-analysis-skill/docker/analyze_libcrypto_gap.sh
+```
+
+The corrected analysis only counts real `objdump` instruction lines with mnemonics and ignores long-instruction continuation lines such as:
+
+```asm
+cf00a: 48 83 3d ee fe 46 00    cmpq   ...
+cf011: 00
+```
+
+where `cf011` is not a new instruction address.
+
 We prepare an example in `extract_gt/pemap/test`to explain how to extract ground truth.
 
 ```console
