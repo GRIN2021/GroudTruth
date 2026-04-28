@@ -1,0 +1,6 @@
+groundtruth_instruction_count: 670703
+kept_instruction_lines: 670701
+removed_instruction_lines: 36614
+kept_continuation_lines: 20423
+removed_continuation_lines: 11265
+output_file: groundtruth-gap-analysis-skill/results/libcrypto-artifacts/libcrypto.text.groundtruth-baseline.objdump.txt

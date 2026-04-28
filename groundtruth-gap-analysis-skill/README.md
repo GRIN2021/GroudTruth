@@ -27,6 +27,8 @@ This directory contains a minimal Docker-based reproduction package for:
   - `libcrypto.so.3`
   - `libcrypto.gtBlock.pb`
   - `libcrypto.text.objdump.txt`
+  - `libcrypto.text.groundtruth-baseline.objdump.txt`
+  - `libcrypto.text.groundtruth-baseline.summary.txt`
 
 ### Docker Reproduction
 
