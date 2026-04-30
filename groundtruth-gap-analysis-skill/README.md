@@ -106,3 +106,29 @@ Most unseen addresses came from:
 - linker or CRT helper stubs
 - hand-written assembly emitting raw bytes or alignment directives such as `.align`, `.byte`, `.long`
 - bytes after unconditional control-flow transfers that `objdump` still decodes linearly
+
+More specifically:
+
+- `AES_cbc_encrypt` corresponds to `crypto/aes/aes-x86_64.s`, which contains many `.align`, `.byte`, and `.long` directives.
+- Near `aes-x86_64.s:1842`, the source has:
+  - `leaq 16(%r10),%rcx`
+  - `.long 0x9066A4F3`
+  - `jmp .Lcbc_exit`
+  These raw bytes can create extra disassembly addresses in `objdump`, but they do not necessarily become groundtruth basic-block instruction entries.
+- Another example is `0xcf486` in `_x86_64_AES_encrypt_compact`. The previous instruction is already `jmpq`, and the following bytes are alignment `nop`s. `objdump` still shows them, but groundtruth does not treat them as normal block instructions.
+- `0xcefb1` and `0xcefb9` fall around `deregister_tm_clones` and are linker/CRT-style alignment `nopl` bytes.
+- `0xcef8a-0xcef8e` (`add %al,(%rax)`) is not meaningful code. It is zero-byte data between function boundaries that gets linearly decoded, close to `fd_gets.cold.3` and `deregister_tm_clones`.
+
+From symbol distribution, the unmatched addresses are concentrated in highly optimized handwritten assembly implementations rather than ordinary C code, especially:
+
+- `aesni_ctr32_encrypt_blocks`
+- `sha1_multi_block_shaext`
+- `sha256_multi_block_shaext`
+- `aesni_cbc_encrypt`
+- `bn_mulx4x_mont`
+
+So the practical conclusion is:
+
+- most `objdump` instruction addresses that do not appear in groundtruth are not missing semantic instructions
+- instead, they are alignment, padding, or embedded raw bytes in `.text` that `objdump` linearly decodes
+- the remaining small portion are bytes that groundtruth explicitly models as `bb.padding`
